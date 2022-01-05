@@ -1,3 +1,40 @@
+const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/';
+
+function send(onError, onSuccess, url, method = 'GET', data = '', headers = {}, timeout = 60000) {
+ 
+  let xhr;
+
+  if (window.XMLHttpRequest) {
+    // Chrome, Mozilla, Opera, Safari
+    xhr = new XMLHttpRequest();
+  } else if (window.ActiveXObject) { 
+    // Internet Explorer
+    xhr = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  for([key, value] of Object.entries(headers)) {
+    xhr.setRequestHeader(key, value)
+  }
+
+  xhr.timeout = timeout; 
+
+  xhr.ontimeout = onError;
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if(xhr.status < 400) {
+        onSuccess(xhr.responseText)
+      } else if (xhr.status >= 400) {
+        onError(xhr.status)
+      }
+    }
+  }
+
+  xhr.open(method, url, true);
+
+  xhr.send(data);
+}
+
 function getCounter() {
   let last = 0;
 
@@ -5,6 +42,7 @@ function getCounter() {
 }
 
 const stackIDGenrator = getCounter()
+
 
 class Good {
   constructor({id, title, price}) {
@@ -33,11 +71,29 @@ class GoodStack {
     this.count = 1;
   }
 
+  _onSuccessAdd(response) {
+    const data = JSON.parse(response);
+    this.count += data.result;
+  }
+  _onSuccessRemove(response) {
+    const data = JSON.parse(response);
+    if(this.count > 0) {
+      this.count -= data.result;
+    }
+  }
+
+  _onError(err) {
+    console.log(err);
+  }
+
+  add() {
+    send(this._onError, this._onSuccessAdd.bind(this), `${API_URL}addToBasket.json`)
+  }
   getGoodId() {
     return this.good.id
   }
 
-  getGood() {
+  getGood(){
     return this.good;
   }
 
@@ -45,20 +101,31 @@ class GoodStack {
     return this.count;
   }
 
-  add() {
-    this.count++;
-    return this.count;
+  getPrice() {
+    return this.good.price * this.count
   }
 
   remove() {
-    this.count--;
-    return this.count;
+    send(this._onError, this._onSuccessRemove.bind(this), `${API_URL}deleteFromBasket.json`)
   }
 }
 
 class Cart {
   constructor(){
     this.list = []
+  }
+
+  _onSuccess(response) {
+    const data = JSON.parse(response);
+    console.log(data);
+  }
+
+  _onError(err) {
+    console.log(err);
+  }
+
+  getBasket() {
+    send(this._onError, this._onSuccess.bind(this), `${API_URL}getBasket.json`)
   }
 
   add(good) {
@@ -69,7 +136,6 @@ class Cart {
     } else {
       this.list.push(new GoodStack(good))
     }
-
   }
 
   remove(id) {
@@ -82,7 +148,14 @@ class Cart {
         this.list.splice(idx, 1)
       }
     } 
+  }
 
+  totalPrice() {
+    let totalPrice = 0;
+    this.list.forEach(good => {
+      totalPrice += good.good.price * good.count; 
+      return(totalPrice);
+    })
   }
 }
 
@@ -92,12 +165,21 @@ class Showcase {
     this.cart = cart;
   }
 
+  _onSuccess(response) {
+    const data = JSON.parse(response)
+    data.forEach(product => {
+      this.list.push(
+        new Good({id: product.id_product, title:product.product_name, price:product.price})
+      )
+    });
+  }
+
+  _onError(err) {
+    console.log(err);
+  }
+
   fetchGoods() {
-    this.list = [
-      new Good({id: 1, title: 'Футболка', price: 140}),
-      new Good({id: 2, title: 'Брюки', price: 320}),
-      new Good({id: 3, title: 'Галстук', price: 24})
-    ]
+    send(this._onError, this._onSuccess.bind(this), `${API_URL}catalogData.json`)
   }
 
   addToCart(id) {
@@ -109,38 +191,26 @@ class Showcase {
   }
 }
 
-class GoodsList {
-  
-
-  totalPrice() {
-    this.list.forEach(good => {
-      const totalPrice = ++price; 
-      return totalPrice;
-    })
-  }
-}
-
-class CartElement {
-
-
-}
-
-document.querySelector('.cart-button').addEventListener('click', () => {
-  document.querySelector('.goods-list').classList.toggle('show');
-});
-
 
 const cart = new Cart()
 const showcase = new Showcase(cart)
 
 showcase.fetchGoods();
 
-showcase.addToCart(1)
-showcase.addToCart(1)
-showcase.addToCart(1)
-showcase.addToCart(3)
+setTimeout(() => {
+  showcase.addToCart(123)
+  showcase.addToCart(123)
+  showcase.addToCart(123)
+  showcase.addToCart(456)
 
-cart.remove(1)
+  cart.remove(123)
+  cart.getBasket();
 
 
-console.log(showcase, cart)
+  console.log(showcase, cart)
+}, 1000)
+
+
+
+
+// Создать класс для отрисовки каточки товара на витрине, и класс отрисовки карточки товара в корзине, класс отрисовки корзины, и класс отрисовки витрины
