@@ -1,6 +1,8 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
+const { resolve } = require('path')
+const { rejects } = require('assert')
 const app = express()
 
 const port = 3000
@@ -30,6 +32,15 @@ app.get('/api/v1/cart', (req, res) => {
     }
   })
 })
+
+// app.get('/api/v1/cart', (req, res) => {
+//     fs.readFile(cart_path, 'utf-8', (err, data) => {
+//       return new Promise((resolve, reject) => {
+//       resolve(res.send(data))
+//       reject(res.status(500).send(err))
+//     })
+//   })
+// }) 
 
 app.post('/api/v1/cart', (req, res) => {
   fs.readFile(cart_path, 'utf-8', (err, data) => {
