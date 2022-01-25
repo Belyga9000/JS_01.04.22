@@ -1,21 +1,38 @@
 <template>
     <div class="catalog-navigation">
         <div class="container catalog-navigation_wrp">
-            <h3 class="catalog-navigation_header">new arrivals</h3>
-            <p class="catalog-navigation_menu">home /men /<span class= "catalog-navigation_menu_highlighted"> new arrivals</span></p>    
+            <h3 class="catalog-navigation_header" >{{ pagenavname }}</h3>
+            <p class="catalog-navigation_menu" v-on:load="onLoad" :class="{ 'visually-hidden': isHidden }" >home /men /<span class= "catalog-navigation_menu_highlighted"> {{ pagenavname }}</span></p>    
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "catalognav"
+    name: "pagegnav",
+    data() {
+        return {
+            isHidden: true
+        }
+    },
+    props: ["pagenavname"],
+    methods: {
+        onLoad() {
+            if(this.pagenavname == 'new arrivals'){
+                this.isHidden = false
+            } else {
+                this.isHidden = true
+                };
+        }
+    },
+    mounted() {
+        this.onLoad();
+    },
 }
 </script>
 
 <style lang="scss">
 
-@import "@/assets/scss/_reset.scss";
 @import "@/assets/scss/_variables.scss";
 @import "@/assets/scss/mixins.scss";
 @import "@/assets/scss/_general.scss";

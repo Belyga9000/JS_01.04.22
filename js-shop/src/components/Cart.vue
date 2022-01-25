@@ -1,12 +1,13 @@
-<template><div>
+<template>
+<div>
     <div class="modal">
         <div class="cart-list"></div>
         <ul class="featured__item-list container">
-            <card  v-for="item of list" v-on:cardaction="onRemove" :good="item" v-bind:key="item.id" :actionname="'Delete'"></card>
+            <card v-for="item of list" v-on:cardaction="onRemove" :good="item" v-bind:key="item.id" :actionname="'Delete'"></card>
         </ul>
         <button v-on:click="onClick" class="featured__item-cart-button">Close</button>
     </div>
-    </div>
+</div>
 </template>
 
 <script>
@@ -36,6 +37,5 @@ export default {
     align-items: center;
     flex-direction: column;
 }
-
 
 </style>

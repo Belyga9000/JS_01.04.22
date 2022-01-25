@@ -28,7 +28,6 @@ export default {
 
 <style lang="scss">
 
-@import "@/assets/scss/_reset.scss";
 @import "@/assets/scss/_variables.scss";
 @import "@/assets/scss/mixins.scss";
 @import "@/assets/scss/_general.scss";

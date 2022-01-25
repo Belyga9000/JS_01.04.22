@@ -26,24 +26,13 @@ export default {
 
 <style lang="scss">
 
-@import "@/assets/scss/_reset.scss";
 @import "@/assets/scss/_variables.scss";
 @import "@/assets/scss/mixins.scss";
 @import "@/assets/scss/_general.scss";
 
-.featured__item-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-
-    @include mobile {
-        justify-content: center;
-    }
-}
-
 .featured__item {
-    margin-top: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     width: 360px;
     background-color: $grey;
     padding-bottom: 20px;
