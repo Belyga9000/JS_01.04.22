@@ -16,7 +16,6 @@
 </template>
 
 <script>
-const API_URL = 'http://localhost:3000/api/v1';
 
 import bottompart from '../components/Footer.vue'
 import toppart from '../components/Header.vue'
@@ -36,25 +35,11 @@ export default {
       featureditems,
 
   },
-  data() {
-      return {
-          cart: [],
-      }
-  },
   methods: {
   onCartOpen() {
     this.isCartVisible = !this.isCartVisible
       }
   },
-  mounted() {
-  fetch(`${API_URL}/cart`)
-  .then((res) => {
-    return res.json()
-  })
-  .then((data) => {
-    this.cart = data;
-  })
-  }
 }
 </script>
 

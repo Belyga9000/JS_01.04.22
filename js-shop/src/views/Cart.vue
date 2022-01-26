@@ -5,7 +5,7 @@
         </header>
         <main>
             <pagenav class="marg-bottom" :pagenavname="'shopping cart'" />
-            <carttest :list="cart"></carttest>
+            <carttest></carttest>
         </main>
         <footer>
             <bottompart />
@@ -14,13 +14,11 @@
 </template>
 
 <script>
-const API_URL = 'http://localhost:3000/api/v1';
 
 import bottompart from '../components/Footer.vue'
 import toppart from '../components/Header.vue'
 import pagenav from '../components/PageNav.vue'
 import carttest from '../components/CartTest.vue'
-
 
 export default {
     name: "Cart",
@@ -28,31 +26,13 @@ export default {
         bottompart,
         toppart,
         pagenav,
-        carttest,
-    },
-    data() {
-        return {
-            cart: [],
+        carttest
+        },
+        computed: {
+            list() {
+                return this.$store.getters.getCart
         }
-    },
-      mounted() {
-    fetch(`${API_URL}/showcase`)
-      .then((res) => {
-        return res.json()
-    })
-    .then((data) => {
-      this.showcase = data;
-    })
-
-    fetch(`${API_URL}/cart`)
-    .then((res) => {
-      return res.json()
-    })
-    .then((data) => {
-      this.cart = data;
-    })
-  }
-    
+    }
 }
 </script>
 

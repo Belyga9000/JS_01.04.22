@@ -11,10 +11,14 @@ export default {
     components: {
         card
     },
-    props: ['list'],
     methods: {
-        onAdd(id) {
-            this.$emit('addtocart', id)
+        odAdd(product) {
+            this.$store.dispatch('addToCart', product)
+        }
+    },
+    computed: {
+        list() {
+            return this.$store.getters.getShowcase
         }
     }
 }
