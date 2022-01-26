@@ -36,7 +36,11 @@ export default {
     components: {
         cartitem
     },
-    props:['list']
+        computed: {
+        list() {
+            return this.$store.getters.getCart
+        }
+    }
 }
 </script>
 

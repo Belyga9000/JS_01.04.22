@@ -18,7 +18,7 @@ export default {
     props: ['good', 'actionname'],
     methods: {
         onClick() {
-            this.$emit('cardaction', this.good.id)
+            this.$emit('cardaction', this.good)
         }
     }
 }

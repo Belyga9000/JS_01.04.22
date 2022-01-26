@@ -18,16 +18,20 @@ export default {
     components: {
         card,
     },
-    props: ['list'],
     methods: {
         onClick() {
             this.$emit('cart-close')
             },
-        onRemove(id) {
-            this.$emit('remove-fromcart', id)
+        onRemove(product) {
+            this.$store.dispatch('removeFromCart', product)
             }
+        },
+    computed: {
+        list() {
+            return this.$store.getters.getCart
         }
     }
+}
 </script>
 
 <style lang="scss" scoped>

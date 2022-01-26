@@ -6,19 +6,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      showcase: null,
-    }
-  },
-
   mounted() {
-    fetch('http://localhost:3000/api/v1/showcase')
-      .then(res => res.json())
-      .then(data => {
-        this.showcase = data
-      })
-  }
+    this.$store.dispatch('loadShowcase')
+    this.$store.dispatch('loadCart')
+  },
 }
 </script>
 
